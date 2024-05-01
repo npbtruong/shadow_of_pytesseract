@@ -32,6 +32,7 @@ def findSpeechBubbles(imagePath, method = 'simple'):
             # Preprocess the cropped image (example: convert to grayscale)
             gray = cv2.cvtColor(croppedImage, cv2.COLOR_BGR2GRAY)
             gray = cv2.threshold(gray, 242, 254, cv2.THRESH_BINARY)[1]
+            gray = 255 - gray
             # Display the original and grayscale images
             cv2.imshow('Grayscale Image', gray)
             cv2.waitKey(0)
