@@ -37,16 +37,18 @@ def findSpeechBubbles(imagePath, method = 'simple'):
             h, w = thresh.shape[:2]
             mask = np.zeros((h+2, w+2), np.uint8)
             cv2.floodFill(thresh, mask, (0,0), 0)
-            
-            # Display the original and grayscale images
-            cv2.imshow('Grayscale Image', thresh)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            # Assuming 'thresh' is your image
+            kernel = np.ones((2,2),np.uint8)
+            thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
             
             # Perform OCR on the preprocessed image
             text = tess.image_to_string(thresh, lang='eng',config='--psm 6').replace('\r', ' ').replace("\n", " ")
             print(text)
             if len(text) >= 3:
+                # Display the original and grayscale images
+                cv2.imshow('Grayscale Image', thresh)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
                 
                 croppedImageDimList.append([x, y, x+w, y+h])
 
