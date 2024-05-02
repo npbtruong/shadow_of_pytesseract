@@ -43,8 +43,9 @@ def findSpeechBubbles(imagePath, method = 'simple'):
             
             # Perform OCR on the preprocessed image
             text = tess.image_to_string(thresh, lang='eng',config='--psm 6').replace('\r', ' ').replace("\n", " ")
-            print(text)
+            
             if len(text) >= 3:
+                print(text)
                 # Display the original and grayscale images
                 cv2.imshow('Grayscale Image', thresh)
                 cv2.waitKey(0)
