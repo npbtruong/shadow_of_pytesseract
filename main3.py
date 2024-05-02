@@ -25,12 +25,9 @@ def findSpeechBubbles(imagePath, method = 'simple'):
         
 
         if w < 800 and w > 25 and h < 1000 and h > 20:
-            x = max(0, x - 2)  
-            y = max(0, y - 2)  
-            w = w + 4  
-            h = h + 4
+        
             croppedImage = image[y:y+h, x:x+w]
-
+            croppedImage = cv2.copyMakeBorder(croppedImage, 4, 4, 4, 4, cv2.BORDER_CONSTANT)
 
             # Preprocess the cropped image (example: convert to grayscale)
             gray = cv2.cvtColor(croppedImage, cv2.COLOR_BGR2GRAY)
