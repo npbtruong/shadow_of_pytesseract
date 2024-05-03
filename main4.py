@@ -1,15 +1,15 @@
 import os
-import uuid
 import cv2
 import numpy as np
 import pytesseract as tess
 from os.path import splitext
-from imutils.object_detection import non_max_suppression
+
 
 input_path = "./imgs/"
 output_path = "outputs/"
 
 imageList = [os.path.join(input_path, x) for x in os.listdir(input_path)]
+
 def non_max_suppression_large(boxes, overlapThresh):
     if len(boxes) == 0:
         return []
@@ -42,7 +42,6 @@ def non_max_suppression_large(boxes, overlapThresh):
 
     return boxes[pick].astype("int")
 
-
 def findSpeechBubbles(imagePath, method = 'simple'):
     image = cv2.imread(imagePath)
     imageGray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -71,7 +70,7 @@ def findSpeechBubbles(imagePath, method = 'simple'):
 
         # Preprocess the cropped image
         gray = cv2.cvtColor(croppedImage, cv2.COLOR_BGR2GRAY)
-        _, thresh = cv2.threshold(gray, 235, 255, cv2.THRESH_BINARY_INV)
+        _, thresh = cv2.threshold(gray, 230, 255, cv2.THRESH_BINARY_INV)
         h, w = thresh.shape[:2]
         mask = np.zeros((h+2, w+2), np.uint8)
         cv2.floodFill(thresh, mask, (0,0), 0)
@@ -82,6 +81,7 @@ def findSpeechBubbles(imagePath, method = 'simple'):
         text = tess.image_to_string(thresh, lang='eng',config='--psm 6').replace('\r', ' ').replace("\n", " ")
 
         if len(text) >= 3:
+            
             print(text)
             cv2.imshow('Grayscale Image', thresh)
             cv2.waitKey(0)
