@@ -76,6 +76,7 @@ def findSpeechBubbles(imagePath, method = 'simple'):
         cv2.floodFill(thresh, mask, (0,0), 0)
         kernel = np.ones((2,2),np.uint8)
         thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
+        thresh = 255 - thresh
 
         # Perform OCR on the preprocessed image
         text = tess.image_to_string(thresh, lang='eng',config='--psm 6').replace('\r', ' ').replace("\n", " ")
