@@ -1,5 +1,6 @@
 import os
 import cv2
+import easyocr
 import numpy as np
 import pytesseract as tess
 from os.path import splitext
@@ -71,7 +72,10 @@ def findSpeechBubbles(imagePath, method = 'simple'):
             thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
             
             # Perform OCR on the preprocessed image
-            text = tess.image_to_string(thresh, lang='eng',config='--psm 6').replace('\r', ' ').replace("\n", " ")
+            reader = easyocr.Reader(['en'])
+            results = reader.readtext(thresh)
+            texts = [result[1] for result in results]
+            text = ' '.join(texts)
             
             if len(text) >= 3:
                 
@@ -89,13 +93,14 @@ def findSpeechBubbles(imagePath, method = 'simple'):
         cv2.floodFill(thresh, mask, (0,0), 0)
         kernel = np.ones((2,2),np.uint8)
         thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
-        text = tess.image_to_string(thresh, lang='eng',config='--psm 6').replace('\r', ' ').replace("\n", " ")        
+        
+        reader = easyocr.Reader(['en'])
+        results = reader.readtext(thresh)
+        texts = [result[1] for result in results]
+        text = ' '.join(texts)
+
         if len(text) >= 3:
             print(text)
-            # Display the original and grayscale images
-            cv2.imshow('Grayscale Image', thresh)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
     
     return croppedImageDimList
 
