@@ -60,7 +60,7 @@ def findSpeechBubbles(imagePath, method = 'simple'):
             cv2.floodFill(thresh, mask, (0,0), 0)
             kernel = np.ones((2,2),np.uint8)
             thresh = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel)
-            reader = easyocr.Reader(['vi'])
+            reader = easyocr.Reader(['en'])
             results = reader.readtext(thresh)
             texts = [result[1] for result in results]
             text = ' '.join(texts)
